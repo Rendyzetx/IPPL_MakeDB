@@ -1,3 +1,4 @@
 # IPPL_MakeDB
 
-adasdad
+yang diperlukan:
+npm install express node-fetch cors

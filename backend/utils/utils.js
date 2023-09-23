@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
 
-const API_KEY = "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";
+const API_KEY = "xx";
 const ENDPOINT = "https://api.openai.com/v1/engines/text-davinci-003/completions";
 const MAX_TOKENS = 4000;
 

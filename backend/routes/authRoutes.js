@@ -21,7 +21,7 @@ router.get('/google', passport.authenticate('google', {
 
 router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }), async (req, res) => {
     await logActivity(req.user, 'User Logged In');
-    res.redirect('/somewhere_in_your_app');
+    res.redirect('/');
 });
 
 export default router;

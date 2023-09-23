@@ -18,7 +18,7 @@ app.set('dbPool', pool);
 app.use('/', sqlRoutes);
 app.use('/auth', authRoutes);
 
-app.use(session({ secret: 'your_secret_key', resave: false, saveUninitialized: false }));
+app.use(session({ secret: 'xx', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 

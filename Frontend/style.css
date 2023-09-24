@@ -187,7 +187,6 @@ nav.open .sidebar {
     cursor: pointer;
     visibility: visible;
 }
-
 .chat-input textarea:valid ~ span {
     visibility: visible;
 }

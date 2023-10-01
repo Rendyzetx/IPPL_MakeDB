@@ -1,5 +1,6 @@
 import express from 'express';
-import { relatedDb, get_namadb, check_db, tanyaAI, fix_maxtoken } from '../utils/utils.js';
+import { relatedDb, get_namadb, check_db, fix_maxtoken } from '../utils/utils.js';
+import { logActivity } from '../utils/db.js';
 
 const router = express.Router();
 
@@ -10,11 +11,9 @@ router.post('/generateSQL', async (req, res) => {
             error: "Pertanyaan harus berkaitan dengan database."
         });
     }
-
     const result = await fix_maxtoken(permintaanUser);
     const databaseName = get_namadb(permintaanUser);
     const finalResult = check_db(databaseName, result);
-
     res.app.locals.sqlResult = finalResult;
     res.json({ sql: finalResult });
 });
@@ -28,8 +27,9 @@ router.post('/modifySQLWithMaxTokens', async (req, res) => {
     res.json({ sql: modifiedSql });
 });
 
-router.get('/getSQLResult', (req, res) => {
+router.get('/getSQLResult',(req, res) => {
     const sqlResult = res.app.locals.sqlResult || "Tidak Ada SQL yang Dihasilkan";
+    
     res.json({ sql: sqlResult });
 });
 

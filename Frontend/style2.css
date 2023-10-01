@@ -1,0 +1,404 @@
+/* Import Google font - Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+.iconbot {
+    max-height: 30px;
+    max-width:  30px;
+}
+body {
+    background: #f3ebeb;
+}
+    
+.MakeDB {
+    position: fixed;
+   /* top: 50%;  /*Posisi vertikal ke tengah */
+   /* left: 60%; /* Posisi horizontal ke tengah */
+   /* transform: translate(-50%, -50%); /* Menggeser elemen ke tengah */
+    background: rgba(205, 248, 13, 0);
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    /* border-radius: 15px; */
+    box-shadow: 0 0 128px 0 rgba(0,0,0,0.1),
+                0 32px 64px -48px rgba(0,0,0,0.5);
+}
+.MakeDB header {
+    background: hsl(199, 93%, 52%);
+    padding: 16px 0;
+}
+
+nav .logo {
+    display: flex;
+    align-items: center;
+    margin: 0 24px;
+}
+
+.logo .menu-icon {
+  color: #fdcdcd;
+  font-size: 24px;
+  margin-left: 25px;
+  margin-right: 14px;
+  cursor: pointer;
+}
+
+.logo .iconnav {
+    width: 40px; /* Ubah ukuran sesuai yang Anda inginkan */
+    height: 40px; /* Ubah ukuran sesuai yang Anda inginkan */
+}
+
+nav .nama {
+    color: #fffbfb;
+    position: fixed;
+    left: 48%;
+    
+}
+
+nav .sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    height: 100%;
+    width: 260px;
+    padding: 20px 0;
+    background-color: #fff;
+    box-shadow: 0 5px 1px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
+}
+
+nav.open .sidebar {
+    left: 0;
+    z-index: 1;
+}
+
+.sidebar .sidebar-content {
+    display: flex;
+    height: 90%;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 30px 16px;
+
+}
+
+.sidebar-content .list {
+    list-style: none;
+}
+
+.list .nav-link {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    padding: 14px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+.list .nav-link-out {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    padding: 14px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    background-color: #60e055;
+}
+.nav-link-out:hover {
+    background-color: #f17806;
+}
+
+    
+.nav-link .icon {
+    margin-right: 14px;
+    font-size: 20px;
+    color: #000000;
+}
+.nav-link-out .icon {
+    margin-right: 14px;
+    font-size: 20px;
+    color: #000000;
+}
+
+.nav-link .link {
+    font-size: 16px;
+    color: #000000;
+    font-weight: 400;
+}
+
+.nav-link:hover .icon ,
+.nav-link:hover .link {
+    color: #ffffff;
+}
+.nav-link-out:hover .icon ,
+.nav-link-out:hover .link {
+    color: #ffffff;
+}
+
+.MakeDB .chatbox {
+    height: 600px;
+    overflow-y: auto;
+    padding: 15px 20px 100px;
+}
+
+.chatbox .chat {
+    display: flex;
+}
+
+.chatbox .incoming img {
+    margin-right: 10px; /* Menambahkan margin ke kanan dari <img> */
+}
+.chatbox .outgoing {
+    justify-content: flex-end;
+    margin: 20px;
+}
+.chatbox .chat p {
+    padding: 12px 16px;
+    color: #ffffff;
+    white-space: pre-wrap;
+    font-size: 0.9rem;
+    border-radius: 10px 10px 0 10px;
+    background: #afe4c59d;
+}
+
+.chatbox .chat p.error{
+    color: #3d3c3c;
+    background: #f78585;
+
+}
+
+.chatbox .incoming p {
+    color: #000000;
+    background: #ffffff;
+    border-radius: 10px 10px 10px 0;
+}
+
+.MakeDB .chat-input {
+    position: absolute;
+    bottom: 2%;
+    left: 10%;
+    width: 80%;
+    display: flex;
+    gap: 5px;
+    background: #ffffff;
+    padding: 5px 20px;
+    border-top: 1px solid #ccc;
+    border-radius: 10px 10px 10px 10px;
+}
+
+.chat-input textarea {
+    height: 55px;
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 0.95rem;
+    resize: none;
+    padding: 16px 15px 16px 0;
+}
+
+.chat-input span {
+    align-self: flex-end;
+    height: 55px;
+    line-height: 55px;
+    color: #535353;
+    font-size: 2.35rem;
+    cursor: pointer;
+    visibility: visible;
+}
+.chat-input textarea:valid ~ span {
+    visibility: visible;
+}
+
+.wrapper .button{
+    position: absolute;
+    height: 60px;
+    width: 60px;
+    top: 20%;
+    left: 87%;
+    top: 79%;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0px 10px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease-out;
+  }
+  .wrapper .button:hover{
+    width: 200px;
+  }
+  .wrapper .button .icon{
+    display: inline-block;
+    height: 60px;
+    width: 60px;
+    text-align: center;
+    border-radius: 50px;
+    box-sizing: border-box;
+    line-height: 60px;
+    transition: all 0.3s ease-out;
+  }
+  .wrapper .button:nth-child(1):hover .icon{
+    background: #4267B2;
+  }
+  
+  .wrapper .button .icon i{
+    font-size: 25px;
+    line-height: 60px;
+    transition: all 0.3s ease-out;
+  }
+  .wrapper .button:hover .icon i{
+    color: #fff;
+  }
+  .wrapper .button span{
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 60px;
+    margin-left: 10px;
+    transition: all 0.3s ease-out;
+  }
+  .wrapper .button:nth-child(1) span{
+    color: #4267B2;
+  }
+
+  .wrapper .button-edit{
+    position: absolute;
+    height: 60px;
+    width: 60px;
+    left: 87%;
+    top: 69%;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0px 10px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease-out;
+  }
+  .wrapper .button-edit:hover{
+    width: 200px;
+    
+  }
+  .wrapper .button-edit .icon-edit{
+    display: inline-block;
+    height: 60px;
+    width: 60px;
+    text-align: center;
+    border-radius: 50px;
+    box-sizing: border-box;
+    line-height: 60px;
+    transition: all 0.3s ease-out;
+  }
+  .wrapper .button-edit:nth-child(2):hover .icon-edit{
+    background: #4267B2;
+  }
+  
+  .wrapper .button-edit .icon-edit i{
+    font-size: 25px;
+    line-height: 60px;
+    transition: all 0.3s ease-out;
+  }
+  .wrapper .button-edit:hover .icon-edit i{
+    color: #fff;
+  }
+  .wrapper .button-edit span{
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 60px;
+    margin-left: 10px;
+    transition: all 0.3s ease-out;
+  }
+  .wrapper .button-edit:nth-child(2) span{
+    color: #4267B2;
+  }
+
+
+@media(max-width: 1080px) {
+    .MakeDB {
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+    }
+    .MakeDB .chatbox {
+        height: 90%;
+
+    }
+
+    .wrapper .button,
+    .wrapper .button-edit {
+        height: 40px;
+        width: 40px;
+    }
+
+    .wrapper .button .icon,
+    .wrapper .button-edit .icon-edit {
+        height: 40px;
+        width: 40px;
+        line-height: 40px;
+    }
+
+    .wrapper .button .icon i,
+    .wrapper .button-edit .icon-edit i {
+        font-size: 20px;
+        line-height: 40px;
+    }
+
+    .wrapper .button span,
+    .wrapper .button-edit span {
+        font-size: 16px;
+        line-height: 40px;
+        margin-left: 8px;
+    }
+
+    .chat-input {
+        bottom: 60px; /* Adjust this value to create space for buttons */
+    }
+    
+}
+
+.bgAnimation{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: repeat(20,1fr);
+    grid-template-rows: repeat(20,1fr);
+    background: #1d1d1d;
+    filter: saturate(2);
+    overflow: hidden;
+}
+
+.colorBox{
+    z-index: 2;
+    filter: brightness(1.1);
+    transition: 2s ease;
+    position: relative;
+    margin: 2px;
+    background: #1b1b1b;
+}
+
+
+.backgroundAmim{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: #00bfff;
+    filter: blur(100px);
+    animation: animBack 6s linear infinite;
+}
+
+@keyframes animBack {
+    0%{
+        top: -60px;
+    }
+    100%{
+        top: 95%;
+    }
+}

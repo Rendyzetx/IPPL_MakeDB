@@ -1,0 +1,334 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    color: #fff;
+    background: #111;
+    font-family: 'Poppins',sans-serif;
+}
+
+.container{
+    width: 100%;
+    min-height: 100vh;
+    backdrop-filter: blur(1px);
+    pointer-events: none;
+}
+
+.container nav{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 0 40px;
+    height: 100px;
+    align-items: center;
+}
+
+.container nav h1{
+    font-size: 2.6em;
+    color: #fff;
+    position: relative;
+    cursor: pointer;
+    pointer-events: all;
+    letter-spacing: 4px;
+}
+
+.container nav h1 span{
+    color: #00bfff;
+}
+
+.container nav ul{
+    display: flex;
+}
+
+.container nav ul li{
+    position: relative;
+    list-style: none;
+    font-size: 1.5em;
+    font-weight: 400;
+    padding: 12px 18px;
+    cursor: pointer;
+    pointer-events: all;
+    overflow: hidden;
+}
+
+.container nav ul li::after{
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    width: 0%;
+    height: 3px;
+    left: 50%;
+    background: #00bfff;
+    transform: translateX(-50%);
+    transition: .3s;
+}
+
+.container nav li:hover{
+    color: #00bfff;
+}
+
+.container nav li:hover::after{
+    width: 80%;
+}
+
+.container section{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 100px);
+    text-align: center;
+    pointer-events: none;
+}
+
+.textBox h1{
+    font-size: 3.4em;
+    position: relative;
+    top: -150px; /* Memindahkan ke atas sebesar 20px */
+    
+}
+
+.textBox h1 span{
+    color: #00bfff;
+    
+}
+
+.textBox p{
+    font-size: 1.2em;
+    position: relative;
+    top: -150px; /* Memindahkan ke atas sebesar 20px */
+}
+
+/* .textBox .homeBtn{
+    font-family: 'Poppins';
+    padding: 8px 18px;
+    margin: 16px 12px;
+    font-size: 26px;
+    background-color: transparent;
+    color: var(--i);
+    outline: none;
+    border: 3px solid var(--i);
+    border-radius: 4px;
+    cursor: pointer;
+    pointer-events: all;
+    transition: .3s;
+    font-weight: 600;
+}
+
+.textBox .homeBtn:hover{
+    background-color: var(--i);
+    color: #000;
+} */
+
+.bgAnimation{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: repeat(20,1fr);
+    grid-template-rows: repeat(20,1fr);
+    background: #1d1d1d;
+    filter: saturate(2);
+    overflow: hidden;
+}
+
+.colorBox{
+    z-index: 2;
+    filter: brightness(1.1);
+    transition: 2s ease;
+    position: relative;
+    margin: 2px;
+    user-select: none; /* Ini akan mencegah pengguna dari memilih teks */
+    cursor: default;   /* Ini akan mengatur kursor menjadi default */
+    /* background: #1d1d1d; */
+    display: flex;        /* Add this */
+    justify-content: center; /* Add this */
+    align-items: center;  /* Add this */
+    opacity: 0;  /* Tambahkan ini untuk menyembunyikan teks */
+    transition: opacity 0.3s; /* Tambahkan ini untuk animasi */
+    
+    
+}
+
+.colorBox:hover{
+    background: #00bfff00;
+    transition-duration: 0s;
+    opacity: 1;  /* Saat kursor berada di atas, teks menjadi terlihat */
+}
+
+.backgroundAmim{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: #00bfff;
+    filter: blur(60px);
+    animation: animBack 6s linear infinite;
+}
+
+@keyframes animBack {
+    0%{
+        top: -60px;
+    }
+    100%{
+        top: 120%;
+    }
+}
+
+.login-container {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    backdrop-filter: blur(10px); /* Sesuaikan nilai sesuai kebutuhan Anda */
+    -webkit-backdrop-filter: blur(10px);
+    padding: 30px;
+    align-items: center;
+    border-radius: 20px;
+    border:1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    width: 400px;
+    height: 150 px;
+    position: relative;
+    top: -100px;  /* Memindahkan ke atas sebesar 20px */
+    left: 20%;
+    z-index: 3;
+    
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 7px;
+    font-weight: bold;
+}
+
+/* button {
+    background-color: #f47442;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    width: 100%;
+}
+button:hover {
+    background-color: #357abf;
+} */
+.login-title {
+    display: flex;
+    justify-content: center;
+    font-size: 45px;
+    margin-bottom: 20px;
+}
+
+.fade {
+    animation: fadeInOut 6s infinite;
+}
+
+@keyframes fadeInOut {
+    0%   { opacity: 1; }
+    16%  { opacity: 0; }
+    33%  { opacity: 1; }
+    50%  { opacity: 0; }
+    66%  { opacity: 1; }
+    83%  { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+#char2 {
+    animation-delay: 1s;
+}
+
+#char3 {
+    animation-delay: 2s;
+}
+
+#char4 {
+    animation-delay: 3s;
+}
+
+#char5 {
+    animation-delay: 4s;
+}
+
+.login-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.login-with-google-btn {
+    transition: background-color .3s, box-shadow .3s;
+      
+    padding: 12px 16px 12px 42px;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 1px 1px rgba(0, 0, 0, .25);
+    pointer-events: all;
+    text-decoration: none;
+    
+    color: #757575;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+    
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbC1ydWxlPSJub256ZXJvIi8+PHBhdGggZD0iTTAgMGgxOHYxOEgweiIvPjwvZz48L3N2Zz4=);
+    background-color: rgb(255, 255, 255);
+    background-repeat: no-repeat;
+    background-position: 12px 11px;
+    
+    &:hover {
+      box-shadow: 0 -1px 0 rgba(0, 0, 0, .04), 0 2px 4px rgba(0, 0, 0, .25);
+    }
+    
+    &:active {
+      background-color: #eeeeee;
+    }
+    
+    &:focus {
+      outline: none;
+      box-shadow: 
+        0 -1px 0 rgba(0, 0, 0, .04),
+        0 2px 4px rgba(0, 0, 0, .25),
+        0 0 0 3px #c8dafc;
+    }
+}
+
+/* Ketika lebar layar kurang dari atau sama dengan 768px */
+@media (max-width: 768px) {
+    .login-container {
+        width: 100%; /* Mengatur lebar menjadi 100% dari layar */
+        height: auto; /* Mengatur tinggi sesuai konten */
+        top: 0; /* Mengatur posisi ke atas menjadi 0 */
+        left: 0; /* Mengatur posisi ke kiri menjadi 0 */
+        padding: 20px; /* Mengurangi padding */
+    }
+
+    .login-title {
+        font-size: 30px; /* Mengurangi ukuran font judul */
+        margin-bottom: 15px;
+    }
+
+    .container nav h1 {
+        font-size: 2em; /* Mengurangi ukuran font */
+    }
+    
+    .container nav ul li {
+        font-size: 1.2em; /* Mengurangi ukuran font */
+        padding: 10px 14px;
+    }
+
+    .textBox h1, .textBox p {
+        top: 0; /* Mengatur posisi ke atas menjadi 0 */
+    }
+    
+    /* ... Anda bisa menambahkan perubahan lainnya sesuai kebutuhan ... */
+}

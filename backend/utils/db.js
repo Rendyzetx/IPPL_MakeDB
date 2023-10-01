@@ -9,13 +9,43 @@ const dbConfig = {
 
 const pool = mysql.createPool(dbConfig);
 
-async function registerUser(email) {
-    const [rows] = await pool.query('INSERT INTO users (email) VALUES (?) ON DUPLICATE KEY UPDATE email=email', [email]);
-    return rows.insertId;
+async function registerUser(googleId, displayName, email, ipAddress) {
+    try {
+        const [users] = await pool.query('SELECT * FROM users WHERE google_id = ?', [googleId]);
+        let userId;
+        if (users.length === 0) {
+            const [result] = await pool.query("INSERT INTO users (google_id, name, email, last_login) VALUES (?, ?, ?, NOW())", [googleId, displayName, email]);
+            userId = result.insertId;
+        } else {
+            userId = users[0].id;
+            await pool.query("UPDATE users SET last_login = NOW() WHERE id = ?", [userId]);
+        }
+        
+        return userId;
+    } catch (error) {
+        console.error('Error registering user:', error);
+        throw error;
+    }
 }
 
-async function logActivity(userId, action) {
-    await pool.query('INSERT INTO activity_logs (user_id, action) VALUES (?, ?)', [userId, action]);
+async function logActivity(userId, email, ip, action) {
+    try {
+        const logQuery = "INSERT INTO log_User (user_id, email, ip_address, action, waktu) VALUES (?, ?, ?, ?, NOW())";
+        await pool.query(logQuery, [userId, email, ip, action]);
+    } catch (error) {
+        console.error('Error logging activity:', error);
+        throw error;
+    }
 }
 
-export { pool, registerUser, logActivity };
+async function getUserById(userId) {
+    try {
+        const [users] = await pool.query('SELECT * FROM users WHERE id = ?', [userId]);
+        return users[0];
+    } catch (error) {
+        console.error('Error getting user by id:', error);
+        throw error;
+    }
+}
+
+export { pool, registerUser, logActivity, getUserById };

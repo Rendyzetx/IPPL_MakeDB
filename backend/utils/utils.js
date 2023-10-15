@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
 
-const API_KEY = "xx";
+const API_KEY = "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";
 const ENDPOINT = "https://api.openai.com/v1/engines/text-davinci-003/completions";
 const MAX_TOKENS = 4000;
 
@@ -80,6 +80,50 @@ async function tanyaAI(permintaanUser, checkRelated = true) {
 
     return responseJson.choices[0].text.trim();
 }
+function parseSqlToDiagramData(sql) {
+    const diagramData = {
+        tables: [],
+        relations: []
+    };
+    const tableMatches = sql.match(/CREATE TABLE [\s\S]+?\)\;/g);
+    
+    if (tableMatches) {
+        tableMatches.forEach(tableSql => {
+            const tableNameMatch = tableSql.match(/CREATE TABLE (\w+)/);
+            if (!tableNameMatch) return;
+            const tableName = tableNameMatch[1];
+            const columnMatches = tableSql.match(/(\w+)\s+([\w()]+)( NOT NULL)?( PRIMARY KEY)?/g);
+            let primaryKey = null;
+            const columns = columnMatches ? columnMatches.map(col => {
+                const [, colName, colType, , isPrimaryKey] = col.match(/(\w+)\s+([\w()]+)( NOT NULL)?( PRIMARY KEY)?/);
+                if (isPrimaryKey) {
+                    primaryKey = colName;
+                }
+                return { name: colName, type: colType };
+            }) : [];
+
+            diagramData.tables.push({
+                name: tableName,
+                columns,
+                primaryKey
+            });
+
+            const foreignKeyMatches = tableSql.match(/FOREIGN KEY \((\w+)\) REFERENCES (\w+) \((\w+)\)/g);
+            if (foreignKeyMatches) {
+                foreignKeyMatches.forEach(fkSql => {
+                    const [, fromCol, toTable, toCol] = fkSql.match(/FOREIGN KEY \((\w+)\) REFERENCES (\w+) \((\w+)\)/);
+                    diagramData.relations.push({
+                        fromTable: tableName,
+                        fromColumn: fromCol,
+                        toTable,
+                        toColumn: toCol
+                    });
+                });
+            }
+        });
+    }
+    return diagramData;
+}
 
 export {
     relatedDb,
@@ -87,5 +131,6 @@ export {
     check_db,
     tanyaAI,
     fix_maxtoken,
+    parseSqlToDiagramData
 };
 

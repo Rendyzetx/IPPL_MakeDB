@@ -180,6 +180,28 @@ document.getElementById('downloadSql').addEventListener('click', async () => {
     }
 });
 
+document.getElementById('logoutBtn').addEventListener('click', function() {
+    fetch('http://localhost:3000/auth/logout', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+        
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        // Redirect to home page or login page after logout
+        window.location.href = 'http://127.0.0.1:8080/index.html';
+    })
+    .catch(error => {
+        console.error('Fetch Error:', error);
+        alert('Error logging out. Please try again.');
+    });
+});
+
 const bgAnimation = document.getElementById('bgAnimation');
 
 const numberOfColorBoxes = 400;

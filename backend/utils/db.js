@@ -38,14 +38,32 @@ async function logActivity(userId, email, ip, action) {
     }
 }
 
+// async function getUserById(userId) {
+//     const connection = await mysql.createConnection(dbConfig);
+//     try {
+//         const [rows] = await connection.execute('SELECT * FROM users WHERE google_id = ?', [userId]);
+//         return rows[0];
+//     } catch (error) {
+//         console.error('Error getting user by id:', error);
+//         throw error;
+//     } finally {
+//         await connection.end();
+//     }
+// }
 async function getUserById(userId) {
+    const connection = await mysql.createConnection(dbConfig);
     try {
-        const [users] = await pool.query('SELECT * FROM users WHERE id = ?', [userId]);
-        return users[0];
+        const [rows] = await connection.execute('SELECT * FROM users WHERE google_id = ?', [userId]);
+        console.log(`User retrieved: ${JSON.stringify(rows[0])}`);
+        return rows[0];
     } catch (error) {
         console.error('Error getting user by id:', error);
         throw error;
+    } finally {
+        await connection.end();
     }
 }
+
+
 
 export { pool, registerUser, logActivity, getUserById };

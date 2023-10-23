@@ -36,7 +36,7 @@ app.use(cors(corsOptions));
 app.set('dbPool', pool);
 
 app.use(session({
-    secret: 'secretKey@ipplMakeDB',
+    secret: '',
     store: new SessionStore({
       db: sequelize,
     }),

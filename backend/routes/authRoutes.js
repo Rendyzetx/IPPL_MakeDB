@@ -6,8 +6,8 @@ import { pool, registerUser, logActivity } from '../utils/db.js';
 const router = express.Router();
 
 passport.use(new GoogleStrategy({
-    clientID: "571679498319-g6e9t3fapk5uisc3q91l5lfgn2l808fu.apps.googleusercontent.com",
-    clientSecret: "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",
+    clientID: "",
+    clientSecret: "",
     callbackURL: "http://localhost:3000/auth/google/callback"
 },
 async (token, tokenSecret, profile, done) => {

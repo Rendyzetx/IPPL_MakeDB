@@ -88,21 +88,41 @@ function init() {
 }
 
 function fetchDataFromServer() {
-    fetch('http://localhost:3000/sql/generateERD', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            sql: "\nCREATE DATABASE IF NOT EXISTS kampus;\nUSE kampus;\n\nCREATE TABLE mahasiswa (\n  id_mahasiswa INTEGER PRIMARY KEY AUTO_INCREMENT,\n  nama VARCHAR(50) NOT NULL,\n  alamat VARCHAR(50) NOT NULL,\n  jurusan VARCHAR(50) NOT NULL\n);\n\nCREATE TABLE dosen (\n  id INTEGER PRIMARY KEY AUTO_INCREMENT,\n  nama VARCHAR(50) NOT NULL,\n  alamat VARCHAR(50) NOT NULL,\n  jurusan VARCHAR(50) NOT NULL\n);\n\nCREATE TABLE matakuliah (\n  id INTEGER PRIMARY KEY AUTO_INCREMENT,\n  nama VARCHAR(50) NOT NULL,\n  kode VARCHAR(50) NOT NULL,\n  sks INTEGER NOT NULL\n);\n\nCREATE TABLE kelas (\n  id INTEGER PRIMARY KEY AUTO_INCREMENT,\n  nama VARCHAR(50) NOT NULL,\n  kapasitas INTEGER NOT NULL\n);\n\nCREATE TABLE jadwal (\n  id INTEGER PRIMARY KEY AUTO_INCREMENT,\n  kelas_id INTEGER NOT NULL,\n  matakuliah_id INTEGER NOT NULL,\n  dosen_id INTEGER NOT NULL,\n  FOREIGN KEY (kelas_id) REFERENCES kelas (id),\n  FOREIGN KEY (matakuliah_id) REFERENCES matakuliah (id),\n  FOREIGN KEY (dosen_id) REFERENCES dosen (id)\n);\n\nCREATE TABLE nilai (\n  id INTEGER PRIMARY KEY AUTO_INCREMENT,\n  mahasiswa_id INTEGER NOT NULL,\n  matakuliah_id INTEGER NOT NULL,\n  nilai INTEGER NOT NULL,\n  FOREIGN KEY (mahasiswa_id) REFERENCES mahasiswa (id),\n  FOREIGN KEY (matakuliah_id) REFERENCES matakuliah (id)\n);\n    "
+    fetch('http://localhost:3000/sql/getSQLResult')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.json();
         })
-    })
-    .then(response => response.json())
-    .then(data => {
-        const transformedData = transformData(data);
-        myDiagram.model = new go.GraphLinksModel(transformedData.tables, transformedData.relations);
-    })
-    .catch(error => console.error('Error fetching data:', error));
+        .then(data => {
+            if (!data || !data.sql) {
+                throw new Error('SQL data is not available');
+            }
+
+            const sql = data.sql;
+            console.log('Fetched SQL:', sql);
+
+            return fetch('http://localhost:3000/sql/generateERD', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ sql })
+            });
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Response from /sql/generateERD:', data);
+            const transformedData = transformData(data);
+            myDiagram.model = new go.GraphLinksModel(transformedData.tables, transformedData.relations);
+        })
+        .catch(error => console.error('Error:', error));
 }
 
 function transformData(data) {

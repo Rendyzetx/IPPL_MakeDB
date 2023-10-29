@@ -57,7 +57,33 @@ async function tanyaAI(permintaanUser, checkRelated = true) {
         return "Error: Pertanyaan harus berkaitan dengan database.";
     }
 
-    const promptText = `Dengan deskripsi: '${permintaanUser}', buatkan kode SQL yang mendefinisikan struktur database, memastikan setiap tabel saling terhubung sesuai deskripsi.`;
+    const promptText = `
+    Dengan deskripsi: '${permintaanUser}', buatkan kode SQL yang mendefinisikan struktur database, memastikan setiap tabel saling terhubung sesuai deskripsi.
+
+    Struktur yang diinginkan adalah sebagai berikut:
+
+    - Setiap tabel harus memiliki tepat satu kolom sebagai kunci utama (PRIMARY KEY).
+    - Kunci utama harus bertipe INTEGER, dan otomatis bertambah (AUTO_INCREMENT).
+    - Semua kolom selain kunci utama harus bertipe VARCHAR(50) atau INTEGER, dan tidak boleh null.
+    - Tabel-tabel harus saling terhubung melalui kunci asing (FOREIGN KEY).
+
+    Contoh format output yang diinginkan:
+
+    CREATE TABLE nama_tabel_1 (
+      id INTEGER PRIMARY KEY AUTO_INCREMENT,
+      kolom_2 TIPE_DATA NOT NULL,
+      ...
+    );
+    
+    CREATE TABLE nama_tabel_2 (
+      ...
+      kolom_fk TIPE_DATA,
+      FOREIGN KEY (kolom_fk) REFERENCES nama_tabel_1 (id),
+      ...
+    );
+
+    Silahkan buatkan kode SQL sesuai dengan struktur dan format di atas.
+    `;
     const data = {
         prompt: promptText,
         max_tokens: 2000,
@@ -93,15 +119,19 @@ function parseSqlToDiagramData(sql) {
             const tableNameMatch = tableSql.match(/CREATE TABLE (\w+)/);
             if (!tableNameMatch) return;
             const tableName = tableNameMatch[1];
-            const columnMatches = tableSql.match(/(\w+)\s+([\w()]+)( NOT NULL)?( PRIMARY KEY)?/g);
+            const columnDefinitions = tableSql.split(/,\s*FOREIGN KEY/)[0].replace(/CREATE TABLE \w+ \(/, '');
+            const foreignKeyDefinitions = tableSql.split(columnDefinitions)[1];
+            const columnMatches = columnDefinitions.match(/(\w+)\s+([\w()]+)( NOT NULL)?( PRIMARY KEY)?/g);
             let primaryKey = null;
             const columns = columnMatches ? columnMatches.map(col => {
-                const [, colName, colType, , isPrimaryKey] = col.match(/(\w+)\s+([\w()]+)( NOT NULL)?( PRIMARY KEY)?/);
+                const matchResult = col.match(/(\w+)\s+([\w()]+)( NOT NULL)?( PRIMARY KEY)?/);
+                if (!matchResult) return null;
+                const [, colName, colType, , isPrimaryKey] = matchResult;
                 if (isPrimaryKey) {
                     primaryKey = colName;
                 }
                 return { name: colName, type: colType };
-            }) : [];
+            }).filter(column => column !== null) : [];
 
             diagramData.tables.push({
                 name: tableName,
@@ -109,17 +139,19 @@ function parseSqlToDiagramData(sql) {
                 primaryKey
             });
 
-            const foreignKeyMatches = tableSql.match(/FOREIGN KEY \((\w+)\) REFERENCES (\w+) \((\w+)\)/g);
-            if (foreignKeyMatches) {
-                foreignKeyMatches.forEach(fkSql => {
-                    const [, fromCol, toTable, toCol] = fkSql.match(/FOREIGN KEY \((\w+)\) REFERENCES (\w+) \((\w+)\)/);
-                    diagramData.relations.push({
-                        fromTable: tableName,
-                        fromColumn: fromCol,
-                        toTable,
-                        toColumn: toCol
+            if (foreignKeyDefinitions) {
+                const foreignKeyMatches = foreignKeyDefinitions.match(/\((\w+)\) REFERENCES (\w+) \((\w+)\)/g);
+                if (foreignKeyMatches) {
+                    foreignKeyMatches.forEach(fkSql => {
+                        const [, fromCol, toTable, toCol] = fkSql.match(/\((\w+)\) REFERENCES (\w+) \((\w+)\)/);
+                        diagramData.relations.push({
+                            fromTable: tableName,
+                            fromColumn: fromCol,
+                            toTable,
+                            toColumn: toCol
+                        });
                     });
-                });
+                }
             }
         });
     }

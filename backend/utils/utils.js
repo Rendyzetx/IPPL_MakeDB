@@ -1,7 +1,8 @@
 import fetch from 'node-fetch';
+import dotenv from 'dotenv';
+dotenv.config();
 
-
-const API_KEY = "";
+const API_KEY = process.env.API;
 const ENDPOINT = "https://api.openai.com/v1/engines/text-davinci-003/completions";
 const MAX_TOKENS = 4000;
 

@@ -2,13 +2,15 @@ import express from 'express';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { pool, registerUser, logActivity } from '../utils/db.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const router = express.Router();
 
 passport.use(new GoogleStrategy({
-    clientID: "",
-    clientSecret: "",
-    callbackURL: "http://localhost:3000/auth/google/callback"
+    clientID: process.env.AUTH_ID,
+    clientSecret: process.env.AUTH_SECRET,
+    callbackURL: process.env.AUTH_CALLBACK
 },
 async (token, tokenSecret, profile, done) => {
     try {

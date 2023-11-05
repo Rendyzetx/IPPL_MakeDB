@@ -5,9 +5,23 @@ import authRoutes from './routes/authRoutes.js';
 import cors from 'cors';
 import { pool,getUserById } from './utils/db.js';
 import session from 'express-session';
+import MySQLStore from 'express-mysql-session';
 import passport from 'passport';
-import Sequelize from 'sequelize';
-import SequelizeStore from 'connect-session-sequelize';
+import dotenv from 'dotenv';
+import fs from 'fs';
+import https from 'https';
+dotenv.config();
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/server.makedb.online/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/server.makedb.online/fullchain.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/server.makedb.online/chain.pem', 'utf8');
+
+const credentials = {
+  key: privateKey,
+  cert: certificate,
+  ca: ca
+};
+
+const MySQLStoreWithSession = MySQLStore(session);
 
 const app = express();
 const PORT = 3000;
@@ -15,51 +29,55 @@ const PORT = 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const sequelize = new Sequelize('make_db_akun', 'root', '', {
-    host: 'localhost',
-    dialect: 'mysql'
-  });
+const options = {
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_DATABASE
+};
 
-const SessionStore = SequelizeStore(session.Store);
-
+const SessionStore = new MySQLStoreWithSession(options);
 const corsOptions = {
-    origin: 'http://127.0.0.1:8080',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: 'https://makedb.online',
     credentials: true,
-    optionsSuccessStatus: 204
-}
+};
 
 app.use(cors(corsOptions));
-// app.use(cors());
 
 app.set('dbPool', pool);
 
 app.use(session({
-    secret: '',
-    store: new SessionStore({
-      db: sequelize,
-    }),
-    resave: false,
-    proxy: true,
-    saveUninitialized: false,
-    cookie: {
+  secret: process.env.SECRET,
+  store: SessionStore,
+  resave: false,
+  proxy: true,
+  saveUninitialized: false,
+  cookie: {
         httpOnly: true,
-        // secure: process.env.NODE_ENV === 'production',
-        secure: false,
+        secure: true,
         maxAge: 1000 * 60 * 5,
-        sameSite: 'lax'
+        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'lax'
+  }
+}));
+
+app.use(express.static('public', {
+    etag: false,
+    cacheControl: true,
+    setHeaders: (res, path) => {
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     }
 }));
 
 app.use((req, res, next) => {
-    if (req.session.user) {
-        res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
-        res.header('Expires', '-1');
-        res.header('Pragma', 'no-cache');
-    }
+    res.header('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.header('Pragma', 'no-cache');
+    res.header('Expires', '0');
     next();
 });
+
+app.get('/', (req, res) => {
+    res.send('Make-DB Server !');
+  });
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -85,6 +103,8 @@ passport.deserializeUser(async (id, done) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-}).on('error', console.error.bind(console));
+const httpsServer = https.createServer(credentials, app);
+
+httpsServer.listen(3000, () => {
+    console.log('HTTPS Server running on port 3000');
+  }).on('error', console.error.bind(console));

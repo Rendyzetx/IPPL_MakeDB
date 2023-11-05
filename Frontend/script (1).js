@@ -12,20 +12,3 @@ for (let i = 0; i < numberOfColorBoxes; i++) {
     colorBox.appendChild(textSpan);
     bgAnimation.append(colorBox);
 }
-window.onload = () => {
-    fetch('http://localhost:3000/auth/check-login-status', {
-        method: 'GET',
-        credentials: 'include'
-    })
-        .then(response => {
-            console.log('Response', response);
-            return response.json();
-        })
-        .then(data => {
-            console.log('Data', data);
-            if (data.isLoggedIn) {
-                window.location.href = 'http://127.0.0.1:8080/index2.html';
-            }
-        })
-        .catch(error => console.error('Error:', error));
-};

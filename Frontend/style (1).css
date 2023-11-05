@@ -305,11 +305,11 @@ button:hover {
 /* Ketika lebar layar kurang dari atau sama dengan 768px */
 @media (max-width: 768px) {
     .login-container {
-        width: 100%; /* Mengatur lebar menjadi 100% dari layar */
-        height: auto; /* Mengatur tinggi sesuai konten */
+        width: 80%; /* akan mengambil 80% dari lebar elemen induknya */
+        margin: 0 auto; /* mengatur container di tengah */
         top: 0; /* Mengatur posisi ke atas menjadi 0 */
         left: 0; /* Mengatur posisi ke kiri menjadi 0 */
-        padding: 20px; /* Mengurangi padding */
+        padding: 10px; /* Mengurangi padding */
     }
 
     .login-title {
@@ -328,6 +328,9 @@ button:hover {
 
     .textBox h1, .textBox p {
         top: 0; /* Mengatur posisi ke atas menjadi 0 */
+        width: 80%; /* akan mengambil 80% dari lebar elemen induknya */
+        margin: 20px auto; /* mengatur container di tengah */
+        
     }
     
     /* ... Anda bisa menambahkan perubahan lainnya sesuai kebutuhan ... */

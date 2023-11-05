@@ -1,13 +1,32 @@
+function checkLoginStatus() {
+    fetch("https://server.makedb.online:3000/auth/check-login-status", {
+        method: "GET",
+        credentials: "include",
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.isLoggedIn) {
+            console.log("User is logged in.");
+        } else {
+            console.error("User is not logged in. Redirecting to login page...");
+            window.location.href = "https://makedb.online/index.html";
+        }
+    })
+    .catch(error => {
+        console.error("Error checking login status:", error);
+    });
+}
+checkLoginStatus();
+
 const chatInput  = document.querySelector(".chat-input textarea");
 const sendChatBtn = document.querySelector(".chat-input span");
 const chatbox = document.querySelector(".chatbox");
 let userMessage;
 const inputInitHeight = chatInput.scrollHeight;
-
 let currentSql = '';
 
 const generateResponse = async (incomingChatLi) => {
-    const endpoint = 'http://localhost:3000/sql/generateSQL';
+    const endpoint = 'https://server.makedb.online:3000/sql/generateSQL';
     
     try {
         const response = await fetch(endpoint, {
@@ -63,14 +82,11 @@ const handleChat = () => {
 }
 
 chatInput.addEventListener("input", () => {
-    //Adjust the height of the input textarea based on its content
     chatInput.style.height = `${inputInitHeight}px`;
     chatInput.style.height = `${chatInput.scrollHeight}px`;
 })  
 
 chatInput.addEventListener("keydown", (e) => {
-    //if Enter key is pressed without shift key and the window
-    //width is greater than 800px, handle the chat
     if(e.key === "Enter" && !e.shiftKey && window.innerWidth > 800){
         e.preventDefault();
         handleChat();
@@ -79,35 +95,14 @@ chatInput.addEventListener("keydown", (e) => {
 
 sendChatBtn.addEventListener("click", handleChat);
 
-      
-// //button download
-// let button = document.querySelector(".button");
-// button.addEventListener("click" , ()=> {
-//     button.classList.add("active")
-
-//     setTimeout(()=> {
-//         button.classList.remove("active") //remove active class after 6 second
-//         document.querySelector("i").classList.replace("bx-cloud-download", "bx-check-circle")
-//         document.querySelector(".button-text").innerText = "Completed";
-
-//     },2000) //1s = 100ms
-
-// })
-
-//sidebar
 const navBar = document.querySelector("nav"),
       menuBtns = document.querySelectorAll(".menu-icon");
-    //   overlay = document.querySelector(".overlay");
     
       menuBtns.forEach(menuBtn => {
         menuBtn.addEventListener("click", () => {
             navBar.classList.toggle("open");
         });
       });
-
-    //   overlay.addEventListener("click", () => {
-    //     navBar.classList.remove("open");
-    //   });
 
 
 const modifyBtn = document.getElementById('editSql');
@@ -129,7 +124,7 @@ modifyBtn.addEventListener('click', async () => {
         chatbox.scrollTo(0, chatbox.scrollHeight);
         const previousSql = currentSql;
 
-        const response = await fetch('http://localhost:3000/sql/modifySQLWithMaxTokens', {
+        const response = await fetch('https://server.makedb.online:3000/sql/modifySQLWithMaxTokens', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -153,9 +148,15 @@ modifyBtn.addEventListener('click', async () => {
     }
 });
 
+var applySqlBtn = document.getElementById('applySqlBtn');
+applySqlBtn.addEventListener('click', function(event) {
+    event.preventDefault();
+    window.open('ERD/ERD.html', '_blank');
+});
+
 document.getElementById('downloadSql').addEventListener('click', async () => {
     try {
-        const response = await fetch('http://localhost:3000/sql/getSQLResult');
+        const response = await fetch('https://server.makedb.online:3000/sql/getSQLResult');
         const data = await response.json();
 
         if (data.sql === "Tidak Ada SQL yang Dihasilkan") {
@@ -180,27 +181,39 @@ document.getElementById('downloadSql').addEventListener('click', async () => {
     }
 });
 
-document.getElementById('logoutBtn').addEventListener('click', function() {
-    fetch('http://localhost:3000/auth/logout', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        credentials: 'include'
-        
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        // Redirect to home page or login page after logout
-        window.location.href = 'http://127.0.0.1:8080/index.html';
-    })
-    .catch(error => {
-        console.error('Fetch Error:', error);
-        alert('Error logging out. Please try again.');
-    });
+
+document.getElementById("logoutBtn").addEventListener("click", function () {
+        fetch("https://server.makedb.online:3000/auth/logout", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        })
+          .then((response) => {
+            console.log(response);
+            if (response.status === 200) {
+              response.json().then((data) => {
+                if (data.data === true) {
+                  console.log("Logout successful. Redirecting to login page...");
+                  const loginUrl = "https://makedb.online";
+                  window.location.href = loginUrl;
+                } else {
+                  console.error("Logout failed.");
+                  const loginUrl = "https://makedb.online";
+                  window.location.href = loginUrl;
+                }
+              });
+            } else {
+              console.error("Logout failed.");
+              alert("Logout failed. Please try again.");
+            }
+          })
+          .catch((error) => {
+            console.error("Fetch Error:", error);;
+          });
 });
+
 
 const bgAnimation = document.getElementById('bgAnimation');
 
